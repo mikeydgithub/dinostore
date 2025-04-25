@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Shopping Cart</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Your Shopping Cart</h1>
+        <nav>
+            <a href="{{ url_for('index') }}">Continue Shopping</a>
+        </nav>
+    </header>
+
+    <main>
+        {% if cart_items %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart_items %}
+                <tr>
+                    <td>
+                        <img src="{{ url_for('static', filename='uploads/' + item.product.image) }}"
+                             alt="{{ item.product.name }}"
+                             title="{{ item.product.name }}"
+                             class="product-image">
+                             {{ item.product.name }}
+                    </td>
+                    
+                    <td>${{ item.product.price|float }}</td>
+                    <td>
+                        <input type="number" class="quantity-input" data-product-id="{{ item.product.id }}" value="{{ item.quantity }}" min="0" title="Enter quantity" placeholder="Quantity">
+                    </td>
+                    <td>${{ (item.product.price * item.quantity)|float }}</td>
+                    <td>
+                        <button class="remove-button" data-product-id="{{ item.product.id }}">Remove</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3"><strong>Order Total:</strong></td>
+                    <td><strong>${{ total_price|float|round(2) }}</strong></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+        <button>Proceed to Checkout</button>
+        {% else %}
+        <p>Your cart is empty.</p>
+        {% endif %}
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Dinosaur Toy Emporium</p>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const quantityInputs = document.querySelectorAll('.quantity-input');
+            const removeButtons = document.querySelectorAll('.remove-button');
+
+            quantityInputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    const productId = this.dataset.productId;
+                    const quantity = parseInt(this.value);
+                    fetch('/update_cart', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `product_id=${productId}&quantity=${quantity}`,
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.message) {
+                            window.location.reload(); // Simple way to refresh the cart
+                        } else if (data.error) {
+                            alert(data.error);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error updating cart:', error);
+                    });
+                });
+            });
+
+            removeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = this.dataset.productId;
+                    fetch('/remove_from_cart', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `product_id=${productId}`,
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.message) {
+                            window.location.reload(); // Refresh the cart
+                        } else if (data.error) {
+                            alert(data.error);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error removing from cart:', error);
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

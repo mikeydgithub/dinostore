@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dinosaur Toy Store</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family= অন্তর্ভুক্ত_a_dinosaur_font&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Dinosaur Toy Emporium</h1>
+        <nav>
+            <a href="{{ url_for('index') }}">Shop</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+            <a href="{{ url_for('view_cart') }}">Cart (<span id="cart-count">{{ cart|length }}</span>)</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="products">
+            {% for product in products %}
+            <div class="product">
+                <img src="{{ product.resized_image }}" alt="{{ product.name }}">
+                <h3>{{ product.name }}</h3>
+                <p>${{ product.price|float }}</p>
+                <form action="{{ url_for('add_to_cart') }}" method="POST" class="add-to-cart-form">
+                    <input type="hidden" name="product_id" value="{{ product.id }}" title="Product ID">
+                    <label for="quantity-{{ product.id }}">Quantity:</label>
+                    <input type="number" id="quantity-{{ product.id }}" name="quantity" value="1" min="1" placeholder="Enter quantity">
+                    <button type="submit">Add to Cart</button>
+                </form>
+            </div>
+            {% endfor %}
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Dinosaur Toy Emporium</p>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cartCountSpan = document.getElementById('cart-count');
+            const addToCartForms = document.querySelectorAll('.add-to-cart-form');
+
+            addToCartForms.forEach(form => {
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    const formData = new FormData(this);
+                    fetch('/add_to_cart', {
+                        method: 'POST',
+                        body: formData,
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.message) {
+                            alert(data.message); // Basic feedback
+                            cartCountSpan.textContent = data.cart_count; // Update cart count in nav
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error adding to cart:', error);
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
