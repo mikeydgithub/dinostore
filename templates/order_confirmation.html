@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Order Confirmation</h1>
+    </header>
+
+    <main>
+        <p>Thank you, {{ name }}, for your order!</p>
+        <p>Your order has been placed and will be shipped to:</p>
+        <p>{{ address }}</p>
+        <p>A confirmation email has been sent to: {{ email }}</p>
+
+        <h2>Order Details</h2>
+        <p>Order Date: {{ order_date }}</p>
+        <ul>
+            {% for item in order_items %}
+            <li>{{ item.product_name }} (Quantity: {{ item.quantity }}, Price: ${{ item.price|float|round(2) }}, Total: ${{ (item.price * item.quantity)|float|round(2) }})</li>
+            {% endfor %}
+        </ul>
+        <p><strong>Order Total: ${{ total_price|float|round(2) }}</strong></p>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Dinosaur Toy Emporium</p>
+    </footer>
+</body>
+</html>

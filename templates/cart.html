@@ -25,7 +25,7 @@
                     <th>Total</th>
                     <th>Actions</th>
                 </tr>
-            </thead>
+            </thead> 
             <tbody>
                 {% for item in cart_items %}
                 <tr>
@@ -37,11 +37,11 @@
                              {{ item.product.name }}
                     </td>
                     
-                    <td>${{ item.product.price|float }}</td>
+                    <td>${{ "{:.2f}".format(item.product.price) }}</td>
                     <td>
                         <input type="number" class="quantity-input" data-product-id="{{ item.product.id }}" value="{{ item.quantity }}" min="0" title="Enter quantity" placeholder="Quantity">
                     </td>
-                    <td>${{ (item.product.price * item.quantity)|float }}</td>
+                    <td>${{ "{:.2f}".format(item.product.price * item.quantity) }}</td>
                     <td>
                         <button class="remove-button" data-product-id="{{ item.product.id }}">Remove</button>
                     </td>
@@ -55,11 +55,17 @@
                     <td></td>
                 </tr>
             </tfoot>
-        </table>
-        <button>Proceed to Checkout</button>
+        </table> 
+        <button onclick="window.location.href='{{ url_for('checkout') }}'">Proceed to Checkout</button>
         {% else %}
         <p>Your cart is empty.</p>
         {% endif %}
+        <div class="register_login_from_cart">
+            <p>
+                <a href="{{ url_for('register') }}">Register</a> to create an account or
+                <a href="{{ url_for('login') }}">Login</a> to your account to checkout.
+            </p>
+        </div>
     </main>
 
     <footer>
@@ -98,6 +104,7 @@
             removeButtons.forEach(button => {
                 button.addEventListener('click', function() {
                     const productId = this.dataset.productId;
+                    console.log('Removing product with ID:', productId);
                     fetch('/remove_from_cart', {
                         method: 'POST',
                         headers: {

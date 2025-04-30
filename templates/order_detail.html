@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Order Detail{% endblock %}
+{% block content %}
+    <h1>Order Detail</h1>
+    <p>Order Date: {{ order_date }}</p>
+    <h2>Items:</h2>
+    <ul>
+        {% for item in order_items %}
+            <li>
+                Product: {{ item.product_name }},
+                Quantity: {{ item.quantity }},
+                Price: ${{ item.price|float|round(2) }},
+                Total: ${{ (item.price * item.quantity)|float|round(2) }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

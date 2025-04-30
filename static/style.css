@@ -1,5 +1,12 @@
 body {
-    padding-top: 60px; /* Add padding to the body to prevent content from being hidden under the fixed nav */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensure the body takes up at least the full viewport height */
+    padding-top: 70px; /* Space for the fixed header */
+}
+
+main {
+    flex: 1; /* Allow main to grow and fill the available space */
 }
 
 input {
@@ -120,7 +127,7 @@ nav a:hover {
 
 
 main {
-    margin-top: 20px; /* Add some space above the main content */
+    margin-top: 100px; /* Add some space above the main content */
 }
 
 #products {
@@ -182,3 +189,117 @@ main {
 .product button:hover {
     background-color: #0056b3; /* Darker blue on hover */
 }
+
+.register_login_from_cart{
+   margin-top: 20px; 
+   text-align: center;
+}
+
+form {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px auto; /* Center the form on the page */
+    max-width: 400px; /* Limit the form width */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.register_login_title {
+    text-align: center; /* Center the heading */
+    color: #3498db; /* A nicer blue color */
+    font-size: 2em; /* Larger font size */
+    margin-bottom: 20px; /* Add space below the heading */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Subtle text shadow */
+    font-family: 'Arial', sans-serif;  /* Choose a font */
+    letter-spacing: 1px;
+}
+
+/* Label styling */
+form label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+    color: #555;
+}
+
+/* Input field styling */
+form input[type="text"],
+form input[type="email"],
+form input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+    font-size: 1em;
+}
+
+form input[type="text"]:focus,
+form input[type="email"]:focus,
+form input[type="password"]:focus {
+    outline: none;
+    border-color: #007bff; /* Highlight on focus */
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1); /* Subtle shadow on focus */
+}
+
+/* Error message styling */
+form span {
+    color: red;
+    font-size: 0.9em;
+    display: block;
+    margin-top: 5px;
+}
+
+/* Submit button styling */
+form input[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    margin-top: 20px;
+    width: 100%; /* Make button fill the form width */
+    transition: background-color 0.3s ease;
+}
+
+form input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Style for alerts (e.g., success/error messages) - You might already have this, but included for completeness */
+.alert {
+    padding: 10px;
+    margin: 10px auto;
+    border-radius: 5px;
+    width: fit-content;
+    max-width: 400px;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+footer {
+    background-color: #f8f8f8; /* Light background for the footer */
+    padding: 20px;
+    text-align: center;
+    border-top: 1px solid #eee; /* Optional top border */
+    margin-top: auto; /* Push footer to the bottom */
+}
+
+@media (max-width: 600px) { /* For small screens */
+    body {
+      padding-top: 100px; /* Increase padding-top for taller header */
+    }
+  }
